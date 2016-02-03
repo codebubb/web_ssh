@@ -1,6 +1,8 @@
 <?php
 include('vendor/autoload.php');
 use \phpseclib\Net\SSH2;
+use \phpseclib\File\ANSI;
+$ansi = new ANSI();
 
 echo <<< HTML
 	<form action="ssh.php" method="POST">
@@ -9,7 +11,7 @@ echo <<< HTML
 		<label for="user">Username</label>
 		<input name="user">
 		<label for="pass">Password</label>
-		<input name="pass">
+		<input name="pass" type="password">
 		<label for="port">Port</label>
 		<input name="port" value="22">
 		<input type="submit">
@@ -22,7 +24,9 @@ if(isset($host, $user, $pass)){
 	    exit('Login Failed');
 	}
 
-	echo "<pre>" . $ssh->exec('ls -la') . "</pre>";
+$ansi->appendString($ssh->read('username@username:~$'));
+$ansi->appendString($ssh->read());
+echo $ansi->getScreen();
 }
 
 
